@@ -22,7 +22,12 @@ export async function logout() {
     throw new Error("Error en logout");
   }
 
-  return res.json();
+  const contentType = res.headers.get("content-type") || "";
+  if (contentType.includes("application/json")) {
+    return res.json();
+  }
+  // fallback to text if backend returns plain text
+  return res.text();
 }
 
 // src/lib/api.ts
