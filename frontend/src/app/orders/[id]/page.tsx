@@ -32,7 +32,7 @@ export default function OrderDetailsPage() {
   }
 
   async function handleStatusUpdate(newStatus: string) {
-    const confirmed = window.confirm(`¿Estás seguro de que quieres cambiar el estado de la orden a "${newStatus.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}"?`)
+    const confirmed = window.confirm(`¿You are sure you want to change the order status to "${newStatus.replace('_', ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}"?`)
     if (!confirmed) return
 
     setUpdating(true)
@@ -40,7 +40,7 @@ export default function OrderDetailsPage() {
     try {
       await updateOrder(Number(orderId), newStatus)
       setOrder({ ...order, status: newStatus })
-      setMessage("Estado actualizado exitosamente")
+      setMessage("Status updated successfully")
     } catch (err: any) {
       setMessage(`Error: ${err.message}`)
     } finally {
@@ -94,12 +94,12 @@ export default function OrderDetailsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-8">
         <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-white mb-4">Orden no encontrada</h1>
+          <h1 className="text-2xl font-bold text-white mb-4">Order not found</h1>
           <button
             onClick={() => router.push("/dashboard")}
             className="bg-violet-600 hover:bg-violet-500 text-white px-6 py-2 rounded-lg"
           >
-            Volver al Dashboard
+            Back to Dashboard
           </button>
         </div>
       </div>
@@ -116,12 +116,12 @@ export default function OrderDetailsPage() {
             className="text-slate-400 hover:text-white transition-colors flex items-center gap-2 mb-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            Volver al Dashboard
+            Back to Dashboard
           </button>
           <h1 className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400 bg-clip-text text-transparent mb-2">
-            Detalles de la Orden
+            Order Details
           </h1>
-          <p className="text-slate-400">ID de Orden: #{order.id}</p>
+          <p className="text-slate-400">Order ID: #{order.id}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -129,7 +129,7 @@ export default function OrderDetailsPage() {
           <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
               <Package className="w-6 h-6 text-violet-400" />
-              Items de la Orden
+              Items
             </h2>
 
             <div className="space-y-4">
@@ -138,28 +138,28 @@ export default function OrderDetailsPage() {
                 order.items.map((item: any, index: number) => (
                   <div key={item.id} className="pb-4 border-b border-slate-700/50 last:border-b-0">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-slate-400">Producto {index + 1}</span>
+                      <span className="text-slate-400">Product {index + 1}</span>
                       <span className="text-white font-semibold">{item.referenceName}</span>
                     </div>
                     {item.description && (
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-slate-400">Descripción</span>
+                        <span className="text-slate-400">Description</span>
                         <span className="text-white font-semibold">{item.description}</span>
                       </div>
                     )}
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-slate-400">Cantidad</span>
+                      <span className="text-slate-400">Quantity</span>
                       <span className="text-white font-semibold">{item.quantity}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-slate-400">Precio Unitario</span>
+                      <span className="text-slate-400">Unit Price</span>
                       <span className="text-white font-semibold">${Number(item.unitPrice).toFixed(2)}</span>
                     </div>
                   </div>
                 ))
               ) : (
                 <div className="text-center py-4">
-                  <span className="text-slate-400">No hay items en esta orden</span>
+                  <span className="text-slate-400">There are no items in this order</span>
                 </div>
               )}
 
@@ -173,7 +173,7 @@ export default function OrderDetailsPage() {
               <div className="flex justify-between items-center pb-3 border-b border-slate-700/50">
                 <span className="text-slate-400 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  Creado
+                  Created
                 </span>
                 <span className="text-white font-semibold">
                   {new Date(order.createdAt).toLocaleDateString()}
@@ -183,7 +183,7 @@ export default function OrderDetailsPage() {
               <div className="flex justify-between items-center">
                 <span className="text-slate-400 flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
-                  Actualizado
+                  Updated
                 </span>
                 <span className="text-white font-semibold">
                   {new Date(order.updatedAt).toLocaleDateString()}
@@ -195,38 +195,38 @@ export default function OrderDetailsPage() {
           {/* Status and Actions */}
           <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-8 shadow-2xl">
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              Información General
+              General Information
             </h2>
 
             <div className="space-y-4 mb-8">
               <div className="flex justify-between items-center pb-3 border-b border-slate-700/50">
-                <span className="text-slate-400">Tipo de Orden</span>
+                <span className="text-slate-400">Order Type</span>
                 <span className="text-white font-semibold">{order.type}</span>
               </div>
 
               <div className="flex justify-between items-center pb-3 border-b border-slate-700/50">
-                <span className="text-slate-400">ID de Orden</span>
+                <span className="text-slate-400">Order ID</span>
                 <span className="text-white font-semibold">#{order.id}</span>
               </div>
 
               <div className="flex justify-between items-center pb-3 border-b border-slate-700/50">
-                <span className="text-slate-400">Compañía</span>
+                <span className="text-slate-400">Company</span>
                 <span className="text-white font-semibold">ID: {order.companyId}</span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Creado por</span>
+                <span className="text-slate-400">Created by</span>
                 <span className="text-white font-semibold">{order.createdBy}</span>
               </div>
             </div>
 
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-              Estado y Acciones
+              Status and Actions
             </h2>
 
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Estado Actual</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Current Status</label>
                 <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}>
                   {getStatusIcon(order.status)}
                   {order.status}
@@ -234,7 +234,7 @@ export default function OrderDetailsPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Cambiar Estado</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Change Status</label>
                 {order.status?.toUpperCase() === 'CONFIRMED' || order.status?.toUpperCase() === 'CANCELED' ? (
                   <div className="text-sm text-slate-400 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
                     {order.status?.toUpperCase() === 'CONFIRMED'
@@ -273,7 +273,7 @@ export default function OrderDetailsPage() {
                   className="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-violet-500/25"
                 >
                   <DollarSign className="w-5 h-5" />
-                  Ir al Checkout
+                  Go to Checkout
                 </button>
               )}
             </div>

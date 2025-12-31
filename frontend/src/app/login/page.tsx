@@ -45,7 +45,7 @@ export default function LoginPage() {
         {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
 
         <Button className="w-full" onClick={handleLogin}>
-          Entrar
+          Login
         </Button>
       </div>
     </div>

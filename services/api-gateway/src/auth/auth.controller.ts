@@ -25,7 +25,7 @@ export class AuthController {
   @Post('logout')
   logoutUser(@Res({ passthrough: true }) res: any) {
     res.clearCookie('flowToken');
-    return 'User logged out successfully';
+    return { message: 'Logged out successfully' };
   }
 }
     

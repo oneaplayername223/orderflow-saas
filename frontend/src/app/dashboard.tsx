@@ -10,13 +10,13 @@ export default function DashboardPage() {
     getMe().then(setUser)
   }, [])
 
-  if (!user) return <p>Cargando...</p>
+  if (!user) return <p>Loading...</p>
 
   return (
     <div>
       <h1>Dashboard</h1>
-      <p>Usuario: {user.username}</p>
-      <p>Rol: {user.role}</p>
+      <p>User: {user.username}</p>
+      <p>Role: {user.role}</p>
     </div>
   )
 }

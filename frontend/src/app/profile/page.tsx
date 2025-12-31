@@ -27,7 +27,7 @@ export default function ProfilePage() {
 
   return (
     <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Perfil</h1>
+      <h1 className="text-xl font-bold mb-4">Profile</h1>
       {profile ? (
         <div>
           <p><strong>Username:</strong> {profile.username}</p>
@@ -35,7 +35,7 @@ export default function ProfilePage() {
           <p><strong>Role:</strong> {profile.role}</p>
         </div>
       ) : (
-        <p>Cargando...</p>
+        <p>Loading...</p>
       )}
       {message && <p className="mt-3 text-red-500">{message}</p>}
     </div>

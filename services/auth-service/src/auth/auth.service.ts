@@ -51,7 +51,8 @@ async loginUser(loginUserDto: LoginUserDto) {
       this.notificationService.emit('login-failed-notification', user);
       throw new RpcException('User is not active');
     }
-    const token = await jwt.sign({ accountId: user.id, userId: user.userId, role: role, status: status}, process.env.HASH_SECRET_KEY as string, { expiresIn: '1h' });
+    //I didn't create a refreshToken because I don't feel like it
+    const token = await jwt.sign({ accountId: user.id, userId: user.userId, role: role, status: status}, process.env.HASH_SECRET_KEY as string, { expiresIn: '7d' });
     return {
       message: 'User logged in successfully',
       token

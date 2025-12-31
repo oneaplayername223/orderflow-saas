@@ -57,24 +57,24 @@ export default function CreateOrderPage() {
             onClick={() => router.push("/dashboard")}
             className="text-gray-600 hover:text-gray-800 p-2 rounded hover:bg-gray-100"
           >
-            ← Volver
+            ← Back
           </button>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Crear Nueva Orden</h1>
-            <p className="text-gray-600 mt-1">Completa los detalles de la orden</p>
+            <h1 className="text-3xl font-bold text-gray-900">Create New Order</h1>
+            <p className="text-gray-600 mt-1">Complete the order details</p>
           </div>
         </div>
 
         {/* Main Form Card */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Detalles de la Orden</h2>
-            <p className="text-gray-600">Ingresa la información del producto y cantidad</p>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Order details</h2>
+            <p className="text-gray-600">Enter product and quantity information</p>
           </div>
           <div className="space-y-6">
             {/* Product Name */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Nombre del Producto</label>
+              <label className="text-sm font-medium text-gray-700">Product Name</label>
               <input
                 type="text"
                 placeholder="Ej: Laptop HP Pavilion"
@@ -86,7 +86,7 @@ export default function CreateOrderPage() {
 
             {/* Quantity */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Cantidad</label>
+              <label className="text-sm font-medium text-gray-700">Quantity</label>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -112,7 +112,7 @@ export default function CreateOrderPage() {
 
             {/* Unit Price */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Precio Unitario</label>
+              <label className="text-sm font-medium text-gray-700">Unit Price</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                 <input
@@ -130,7 +130,7 @@ export default function CreateOrderPage() {
             {/* Total Amount Display */}
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <div className="flex justify-between items-center">
-                <span className="text-gray-700 font-medium">Total de la Orden</span>
+                <span className="text-gray-700 font-medium">Total</span>
                 <span className="text-2xl font-bold text-gray-900">${totalAmount.toFixed(2)}</span>
               </div>
             </div>
@@ -144,11 +144,11 @@ export default function CreateOrderPage() {
               {isLoading ? (
                 <>
                   <span className="animate-spin mr-2">⏳</span>
-                  Creando Orden...
+                  Creating Order...
                 </>
               ) : (
                 <>
-                  Crear Orden
+                  Create Order
                 </>
               )}
             </button>
@@ -172,13 +172,13 @@ export default function CreateOrderPage() {
         {createdOrder && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-6">
             <div className="mb-4">
-              <h2 className="text-xl font-semibold text-green-800">Orden Creada Exitosamente</h2>
+              <h2 className="text-xl font-semibold text-green-800">Order Created Successfully</h2>
             </div>
             <div className="space-y-4">
               {/* Order Summary */}
               <div className="grid grid-cols-2 gap-4 p-4 bg-white rounded-lg border">
                 <div>
-                  <p className="text-gray-600 text-sm">ID de Orden</p>
+                  <p className="text-gray-600 text-sm">Order ID</p>
                   <p className="text-gray-900 font-semibold text-lg">#{createdOrder.id}</p>
                 </div>
                 <div>
@@ -189,7 +189,7 @@ export default function CreateOrderPage() {
 
               {/* Items List */}
               <div className="space-y-2">
-                <h3 className="text-gray-900 font-semibold">Productos:</h3>
+                <h3 className="text-gray-900 font-semibold">Products:</h3>
                 {createdOrder.items.map((item: any, index: number) => (
                   <div key={index} className="p-3 bg-white rounded-lg border space-y-1">
                     <p className="text-gray-900 font-medium">{item.referenceName}</p>
@@ -208,13 +208,13 @@ export default function CreateOrderPage() {
                   onClick={() => router.push(`/orders/checkout?orderId=${createdOrder.id}`)}
                   className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md"
                 >
-                  Hacer Checkout
+                  Go to Checkout
                 </button>
                 <button
                   onClick={() => router.push("/dashboard")}
                   className="flex-1 border border-gray-300 text-gray-700 hover:bg-gray-50 py-2 px-4 rounded-md"
                 >
-                  Ver Dashboard
+                  Go Dashboard
                 </button>
               </div>
             </div>

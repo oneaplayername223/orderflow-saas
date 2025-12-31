@@ -41,7 +41,7 @@ export default function CreateOrderForm() {
 
   return (
     <form onSubmit={submit} className="space-y-4 max-w-xl">
-      <h2 className="text-xl font-bold">Crear Orden</h2>
+      <h2 className="text-xl font-bold">Create Orden</h2>
 
       {items.map((item, i) => (
         <div key={i} className="border p-3 rounded space-y-2">
@@ -78,14 +78,14 @@ export default function CreateOrderForm() {
       ))}
 
       <button type="button" onClick={addItem}>
-        + Agregar ítem
+        + Add ítem
       </button>
 
       <div>
         <strong>Total:</strong> ${totalAmount.toFixed(2)}
       </div>
 
-      <button type="submit">Crear Orden</button>
+      <button type="submit">Create Order</button>
     </form>
   )
 }

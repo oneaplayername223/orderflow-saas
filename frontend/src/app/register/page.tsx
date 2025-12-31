@@ -60,7 +60,7 @@ export default function RegisterPage() {
           required
         />
         <button type="submit" className="bg-blue-600 text-white px-4 py-2 w-full">
-          Registrarse
+          Register
         </button>
       </form>
       {message && <p className="mt-3">{message}</p>}

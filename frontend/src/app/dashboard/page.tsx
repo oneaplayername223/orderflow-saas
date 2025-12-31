@@ -119,7 +119,7 @@ export default function DashboardPage() {
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="flex items-center gap-3">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-          <p className="text-lg text-gray-600">Cargando dashboard...</p>
+          <p className="text-lg text-gray-600">loading dashboard...</p>
         </div>
       </div>
     )
@@ -137,12 +137,12 @@ export default function DashboardPage() {
               <span className="text-blue-600 font-bold">D</span>
             </div>
             <div>
-              <h1 className="text-xl font-semibold">Dashboard Empresarial</h1>
+              <h1 className="text-xl font-semibold">Dashboard</h1>
               <p className="text-sm text-gray-600">{user.company_name}</p>
             </div>
           </div>
           <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-            Cerrar Sesión
+            Logout
           </button>
         </div>
       </header>
@@ -150,10 +150,10 @@ export default function DashboardPage() {
       <main className="container mx-auto px-6 py-8">
         {/* Date Filter */}
         <div className="mb-6 bg-white p-4 rounded-lg shadow border">
-          <h3 className="text-lg font-semibold mb-4">Filtrar por Fecha</h3>
+          <h3 className="text-lg font-semibold mb-4">Filter by Date</h3>
           <div className="flex gap-4 items-end">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Fecha Inicio</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Start date</label>
               <input
                 type="date"
                 value={dateFilter.startDate || ''}
@@ -162,7 +162,7 @@ export default function DashboardPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Fecha Fin</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">End date</label>
               <input
                 type="date"
                 value={dateFilter.endDate || ''}
@@ -184,10 +184,10 @@ export default function DashboardPage() {
           <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Órdenes</p>
+                <p className="text-sm font-medium text-gray-600">Total Orders</p>
                 <p className="text-2xl font-bold">{totalOrders}</p>
                 <p className="text-xs text-gray-500">
-                  {dateFilter.startDate || dateFilter.endDate ? 'Filtradas por fecha' : '+ ' + canceledOrders + ' canceladas'}
+                  {dateFilter.startDate || dateFilter.endDate ? 'Filtered by date' : '+ ' + canceledOrders + ' canceled'}
                 </p>
               </div>
               <div className="text-blue-600">
@@ -201,7 +201,7 @@ export default function DashboardPage() {
           <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Confirmadas</p>
+                <p className="text-sm font-medium text-gray-600">Confirmed</p>
                 <p className="text-2xl font-bold">{confirmedOrders}</p>
                 <p className="text-xs text-gray-500">
                   {dateFilter.startDate || dateFilter.endDate ? 'Filtradas por fecha' : Math.round((confirmedOrders / totalOrders) * 100) + '% del total'}
@@ -218,12 +218,12 @@ export default function DashboardPage() {
           <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Ingresos Totales (Confirmados)</p>
+                <p className="text-sm font-medium text-gray-600">Total Revenue (Confirmed)</p>
                 <p className="text-2xl font-bold">
                   ${totalRevenue.toLocaleString("es-MX", { minimumFractionDigits: 0 })}
                 </p>
                 <p className="text-xs text-gray-500">
-                  {dateFilter.startDate || dateFilter.endDate ? 'Filtrados por fecha' : 'Promedio por orden confirmada: $' + (confirmedOrders > 0 ? (totalRevenue / confirmedOrders).toFixed(2) : "0.00")}
+                  {dateFilter.startDate || dateFilter.endDate ? 'Filtered by date' : 'Average per confirmed order: $' + (confirmedOrders > 0 ? (totalRevenue / confirmedOrders).toFixed(2) : "0.00")}
                 </p>
               </div>
               <div className="text-green-600">
@@ -237,12 +237,12 @@ export default function DashboardPage() {
           <div className="bg-white p-6 rounded-lg shadow border">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Tasa de Éxito</p>
+                <p className="text-sm font-medium text-gray-600">Success Rate</p>
                 <p className="text-2xl font-bold">
                   {totalOrders > 0 ? Math.round((confirmedOrders / totalOrders) * 100) : 0}%
                 </p>
                 <p className="text-xs text-gray-500">
-                  {dateFilter.startDate || dateFilter.endDate ? 'Filtrados por fecha' : confirmedOrders + ' de ' + totalOrders + ' órdenes'}
+                  {dateFilter.startDate || dateFilter.endDate ? 'Filtered by date' : confirmedOrders + ' or ' + totalOrders + ' orders'}
                 </p>
               </div>
               <div className="text-blue-600">
@@ -257,14 +257,14 @@ export default function DashboardPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           {/* User Profile */}
           <div className="bg-white p-6 rounded-lg shadow border lg:col-span-1">
-            <h2 className="text-lg font-semibold mb-4">Perfil de Usuario</h2>
+            <h2 className="text-lg font-semibold mb-4">User Profile</h2>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-blue-600 font-bold">@</span>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Usuario</p>
+                  <p className="text-sm text-gray-600">User</p>
                   <p className="font-semibold">{user.username}</p>
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function DashboardPage() {
                   <span className="text-gray-600 font-bold">✉</span>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Correo</p>
+                  <p className="text-sm text-gray-600">Email</p>
                   <p className="font-semibold">{user.email}</p>
                 </div>
               </div>
@@ -284,13 +284,13 @@ export default function DashboardPage() {
                   <span className="text-purple-600 font-bold">🏢</span>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Compañía</p>
+                  <p className="text-sm text-gray-600">Company</p>
                   <p className="font-semibold">{user.company_name}</p>
                 </div>
               </div>
 
               <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-600">Rol</p>
+                <p className="text-sm text-gray-600">Role</p>
                 <p className="font-semibold capitalize">{user.role}</p>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 capitalize mt-1">
                   {user.status}
@@ -301,15 +301,15 @@ export default function DashboardPage() {
 
           {/* Orders List */}
           <div className="bg-white p-6 rounded-lg shadow border lg:col-span-2">
-            <h2 className="text-lg font-semibold mb-4">Gestión de Órdenes</h2>
-            <p className="text-sm text-gray-600 mb-4">Cambia el estado de las órdenes o haz checkout para confirmarlas. Las órdenes confirmadas no pueden modificarse.</p>
+            <h2 className="text-lg font-semibold mb-4">Order Management</h2>
+            <p className="text-sm text-gray-600 mb-4">Change the status of orders or checkout to confirm them. Confirmed orders cannot be modified.</p>
             {orders.length === 0 ? (
               <div className="text-center py-12">
                 <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <span className="text-gray-400 text-2xl">📦</span>
                 </div>
-                <p className="text-lg font-medium">No hay órdenes</p>
-                <p className="text-sm text-gray-500">Las órdenes aparecerán aquí cuando estén disponibles</p>
+                <p className="text-lg font-medium">There are no orders</p>
+                <p className="text-sm text-gray-500">Orders will appear here when available</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -325,7 +325,7 @@ export default function DashboardPage() {
                           <span className="text-blue-600 font-bold">📦</span>
                         </div>
                         <div>
-                          <p className="font-semibold">Orden #{order.id}</p>
+                          <p className="font-semibold">Order #{order.id}</p>
                           <p className="text-sm text-gray-500">{order.createdAt || "Fecha no disponible"}</p>
                         </div>
                       </div>
@@ -372,15 +372,15 @@ export default function DashboardPage() {
                 disabled={currentPage === 1}
                 className="px-3 py-1 border border-gray-300 rounded disabled:opacity-50"
               >
-                Anterior
+                Previous
               </button>
-              <span className="px-3 py-1">Página {currentPage}</span>
+              <span className="px-3 py-1">Page {currentPage}</span>
               <button
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={orders.length < 10}
                 className="px-3 py-1 border border-gray-300 rounded disabled:opacity-50"
               >
-                Siguiente
+                Next
               </button>
             </div>
           </div>
