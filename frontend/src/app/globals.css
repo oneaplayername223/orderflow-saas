@@ -123,3 +123,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Hide global nav when body has no-nav class (used on /login) */
+body.no-nav nav {
+  display: none !important;
+}

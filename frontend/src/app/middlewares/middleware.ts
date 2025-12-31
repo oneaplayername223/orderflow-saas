@@ -6,8 +6,15 @@ export function middleware(req: NextRequest) {
   const tokenCookie = req.cookies.get("flowToken")
   const pathname = req.nextUrl.pathname
 
-  // Only protect dashboard and orders routes
-  const protectedRoute = pathname.startsWith("/dashboard") || pathname.startsWith("/orders")
+  // Protect dashboard, orders, profile, checkout and other private routes
+  const protectedRoute = (
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/orders") ||
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/checkout") ||
+    pathname.startsWith("/payments") ||
+    pathname.startsWith("/admin")
+  )
 
   if (!protectedRoute) return NextResponse.next()
 

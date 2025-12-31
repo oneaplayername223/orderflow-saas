@@ -16,7 +16,8 @@ export default function LoginPage() {
   async function handleLogin() {
     try {
       await login(username, password)
-      router.push("/dashboard")
+      // Force full reload so server-side layout reads the new httpOnly cookie
+      window.location.href = "/dashboard"
     } catch (e: any) {
       setError(e.message)
     }
@@ -45,8 +46,17 @@ export default function LoginPage() {
         {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
 
         <Button className="w-full" onClick={handleLogin}>
-          Login
+          Entrar
         </Button>
+
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => router.push('/register')}
+            className="text-sm text-blue-600 hover:underline"
+          >
+            ¿No tienes cuenta? Regístrate
+          </button>
+        </div>
       </div>
     </div>
   )
