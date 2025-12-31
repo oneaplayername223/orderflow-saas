@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    container_name: users_db
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=users_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+    networks: 
+      - rabbitmq-network
+  
+  server:
+    build:
+      context: .
+    container_name: users_service
+    command: npm run start:dev
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@db:5432/users_db
+    ports:
+      - 6000:6000
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+    networks: 
+      - rabbitmq-network
+  
+networks: 
+  rabbitmq-network: 
+    external: true
+
+volumes:
+  db_data:

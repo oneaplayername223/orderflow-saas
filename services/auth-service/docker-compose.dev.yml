@@ -1,0 +1,55 @@
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    container_name: auth-db-dev
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=auth_db
+    volumes:
+      - db_data_dev:/var/lib/postgresql/data
+    networks: 
+      - rabbitmq-network
+
+  server:
+
+    build:
+      context: .
+    container_name: auth_service_dev
+    command: npm run start:dev   
+    develop:
+      watch:
+        - action: sync
+          path: ./src/app
+          target: /src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:postgres@db:5432/auth_db
+    ports:
+      - "4000:4000"
+
+    
+    volumes:
+      - .:/usr/src/app              
+      - /usr/src/app/node_modules  
+      
+    depends_on:
+      - db
+    networks: 
+      - rabbitmq-network
+  
+
+networks: 
+  rabbitmq-network: 
+    external: true
+
+volumes:
+  db_data_dev:

@@ -1,0 +1,22 @@
+services:
+
+  server:
+    build:
+      context: .
+    container_name: front_end
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3001:3001
+    volumes:
+      - .:/usr/src/app
+      - .next:/usr/src/app/.next
+    networks: 
+      - rabbitmq-network
+      
+
+
+networks: 
+  rabbitmq-network: 
+    external: true
+

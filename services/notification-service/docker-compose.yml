@@ -1,0 +1,23 @@
+services:
+
+  server:
+    build:
+      context: .
+    container_name: notification_service
+    command: npm run start:dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - 6002:6002
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks: 
+      - rabbitmq-network
+  
+  
+networks: 
+  rabbitmq-network: 
+    external: true
+
+
