@@ -14,11 +14,10 @@ COPY . .
 
 # Exponemos el puerto
 EXPOSE 4000
-
 # Ajustamos permisos para el usuario node
 RUN chown -R node:node /usr/src/app
 
 # Cambiamos a usuario no root
 USER node
 # Ejecutamos la app en modo desarrollo
-CMD ["npm", "run", "start:dev"]
+CMD npx prisma migrate deploy && node dist/main.js
