@@ -33,8 +33,6 @@ This project is built as a **real-world backend system**, not a simple CRUD demo
 
 ### Infrastructure
 - **Docker**
-- **Nginx (Reverse Proxy)**
-
 ---
 
 ## 📦 Microservices

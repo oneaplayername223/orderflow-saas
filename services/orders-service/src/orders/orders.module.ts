@@ -3,7 +3,8 @@ import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { PrismaService } from './prisma/prisma.service';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
   imports: [
     ClientsModule.register([
@@ -11,7 +12,7 @@ import { PrismaService } from './prisma/prisma.service';
         name: 'PAYMENTS_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://rabbitmq:5672'],
+          urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
           queue: 'payments_queue',
         },
       },

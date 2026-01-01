@@ -2,7 +2,8 @@ import { Module } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { NotificationsController } from './notifications.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
   imports: [
     ClientsModule.register([
@@ -10,7 +11,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'NOTIFICATION_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://rabbitmq:5672'],
+        urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
           queue: 'notifications_queue',
         },
       },
