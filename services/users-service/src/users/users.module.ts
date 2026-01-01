@@ -3,7 +3,8 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { PrismaService } from './prisma/prisma.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-
+import * as dotenv from 'dotenv';
+dotenv.config();
 @Module({
   imports: [
     ClientsModule.register([
@@ -11,7 +12,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
         name: 'AUTH_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://rabbitmq:5672'],
+          urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
           queue: 'auth_queue',
         },
       },
