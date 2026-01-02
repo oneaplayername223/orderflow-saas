@@ -20,7 +20,7 @@ export class AuthController {
     
     const token: string = response.token;
     res.cookie('flowToken', token, { httpOnly: true });
-    return response
+    return response.message;
   }
   @Post('logout')
   logoutUser(@Res({ passthrough: true }) res: any) {
