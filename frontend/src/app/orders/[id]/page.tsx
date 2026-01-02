@@ -238,8 +238,8 @@ export default function OrderDetailsPage() {
                 {order.status?.toUpperCase() === 'CONFIRMED' || order.status?.toUpperCase() === 'CANCELED' ? (
                   <div className="text-sm text-slate-400 bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
                     {order.status?.toUpperCase() === 'CONFIRMED'
-                      ? 'Las órdenes confirmadas no pueden cambiar su estado.'
-                      : 'Las órdenes canceladas no pueden cambiar su estado.'
+                      ? 'confirmed orders cannot change their status.'
+                      : 'Canceled orders cannot change their status.'
                     }
                   </div>
                 ) : (
