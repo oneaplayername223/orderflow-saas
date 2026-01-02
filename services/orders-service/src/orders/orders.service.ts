@@ -78,7 +78,7 @@ const orderItem = await this.prisma.orderItem.updateMany({where: {orderId: order
 
 if (!orderItem) throw new RpcException('Order not found');
 
-const paymentsPayload = {orderItemPrice, companyId, orderId, quantity, date: new Date()};
+const paymentsPayload = {orderItemPrice, companyId, orderId, quantity, status, date: new Date()};
 this.notificationService.emit('order-confirmed-notification', paymentsPayload)
 this.paymentsService.emit('checkout-payment', paymentsPayload)
 

@@ -50,12 +50,12 @@ export class NotificationsService {
 
     async orderConfirmed(data: any){
          return console.log(`
-            Order Confirmed
-            Item price: ${data.orderItemPrice + ' ' + data.currency}
-            Provider: ${data.provider}
+            Order Confirmed successfully
+            Item price: ${data.orderItemPrice + ' ' + '$'}
+            quantity: ${data.quantity}
             Order id: ${data.orderId}
-            Currency: ${data.currency}
             Status: ${data.status}
+            Date: ${data.date}
             
             `);
     }
