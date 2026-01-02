@@ -12,7 +12,7 @@ async function bootstrap() {
     options: {
       urls: [process.env.RABBITMQ_URL as string],
       queue: 'users_queue',
-    },
+    }
   });
   await app.listen();
   logger.log(`Users Microservice listening`);
