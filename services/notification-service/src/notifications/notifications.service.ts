@@ -47,4 +47,16 @@ export class NotificationsService {
             Please Contact Support
             `);
     }
+
+    async orderConfirmed(data: any){
+         return console.log(`
+            Order Confirmed
+            Item price: ${data.orderItemPrice + ' ' + data.currency}
+            Provider: ${data.provider}
+            Order id: ${data.orderId}
+            Currency: ${data.currency}
+            Status: ${data.status}
+            
+            `);
+    }
 }

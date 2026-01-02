@@ -43,7 +43,7 @@ return "Email sent successfully";
     async registerSucceeded(data: any) {
       const {email, username} = data
     
-       await this.transporter.sendMail({
+     await this.transporter.sendMail({
   from: "e5m2software@gmail.com",
   to: email,
   subject: "OrderFlow - Register Notification",
@@ -60,4 +60,26 @@ return "Email sent successfully";
   `
     }
 )}
+
+async paymentSucceeded(data: any){
+  const {email, username} = data
+    
+     await this.transporter.sendMail({
+  from: "e5m2software@gmail.com",
+  to: email,
+  subject: "OrderFlow - Payment Notification",
+  html: `
+    <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+      <h2 style="color: #4CAF50;">OrderFlow - Payment Notification</h2>
+      <p>Hello <strong>${username}</strong>,</p>
+      <p>Your payment has been <span style="color: #0fdb00ff;">successfully confirmed</span>.</p>
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;" />
+      <p style="font-size: 12px; color: #777;">
+        .
+      </p>
+    </div>
+  `
+    }
+)
+}
 }

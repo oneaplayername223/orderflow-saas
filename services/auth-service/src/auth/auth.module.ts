@@ -12,7 +12,7 @@ dotenv.config();
         name: 'NOTIFICATION_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
+          urls: [process.env.RABBITMQ_URL as string],
           queue: 'notifications_queue',
         },
       },
@@ -20,7 +20,7 @@ dotenv.config();
         name: 'USERS_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
+          urls: [process.env.RABBITMQ_URL as string],
           queue: 'users_queue',
         },
       }

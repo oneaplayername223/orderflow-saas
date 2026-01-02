@@ -1,14 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { PrismaService } from './prisma/prisma.service';
-import { PaginationDto } from './dto/pagination.dto';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class OrdersService {
   constructor(private prisma: PrismaService, 
-@Inject('PAYMENTS_SERVICE') private readonly paymentsService: ClientProxy) {}
+@Inject('PAYMENTS_SERVICE') private readonly paymentsService: ClientProxy, 
+@Inject('NOTIFICATION_SERVICE') private readonly notificationService: ClientProxy) {}
 
   async create(payload: any) {
     const companyId = payload.user_id.accountId;
@@ -79,6 +79,7 @@ const orderItem = await this.prisma.orderItem.updateMany({where: {orderId: order
 if (!orderItem) throw new RpcException('Order not found');
 
 const paymentsPayload = {orderItemPrice, companyId, orderId, quantity, date: new Date()};
+this.notificationService.emit('order-confirmed-notification', paymentsPayload)
 this.paymentsService.emit('checkout-payment', paymentsPayload)
 
 return { 

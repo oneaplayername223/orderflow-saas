@@ -12,7 +12,7 @@ dotenv.config();
         name: 'AUTH_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
+          urls: [process.env.RABBITMQ_URL as string],
           queue: 'auth_queue',
         },
       },

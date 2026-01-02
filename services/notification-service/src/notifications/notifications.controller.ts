@@ -32,4 +32,8 @@ export class NotificationsController {
     return this.notificationsService.paymentFailed(data);
   }
   
+  @MessagePattern('order-confirmed-notification')
+  orderConfirmed(data: any){
+    return this.notificationsService.orderConfirmed(data)
+  }
 }

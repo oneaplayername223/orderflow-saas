@@ -15,5 +15,10 @@ export class MailController {
     registerSucceeded(data: any) {
       return this.mailService.registerSucceeded(data);
     }
+
+    @MessagePattern('payment-succeeded-mail')
+    paymentSucceeded(data: any) {
+      return this.mailService.paymentSucceeded(data);
+    }
   
 }
