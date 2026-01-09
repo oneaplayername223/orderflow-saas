@@ -6,7 +6,6 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache openssl
 # Copiamos primero package.json y package-lock.json
 COPY package*.json ./
-ENV DATABASE_URL='postgres://postgres:postgres@localhost:5433/orders_db'
 # Instalamos TODAS las dependencias (incluyendo dev)
 RUN npm install
 
