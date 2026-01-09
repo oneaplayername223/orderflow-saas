@@ -1,16 +1,13 @@
 # syntax=docker/dockerfile:1
 ARG NODE_VERSION=22.14.0
-FROM node:${NODE_VERSION}-slim
+FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /usr/src/app
 RUN apk add --no-cache openssl
 # Copiamos primero package.json y package-lock.json
 COPY package*.json ./
 # Instalamos TODAS las dependencias (incluyendo dev)
-RUN npm install 
-RUN npm install --legacy-peer-deps
-RUN npm rebuild @next/swc
-
+RUN npm install
 
 # Copiamos el resto del código
 COPY . .
