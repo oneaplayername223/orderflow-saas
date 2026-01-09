@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Inject, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ClientProxy, Payload } from '@nestjs/microservices';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -14,6 +14,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(200)
   async loginUser(@Res({ passthrough: true }) res: any, @Body() loginUserDto: LoginUserDto, @Req() req: any) {
     const ip = req.ip;
     const response = await firstValueFrom(this.authService.send('login', {...loginUserDto, ip}));
