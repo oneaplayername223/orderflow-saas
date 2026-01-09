@@ -12,7 +12,6 @@ describe('UsersController (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [UsersModule],
     })
-      // Mock del cliente RMQ
       .overrideProvider('USERS_SERVICE')
       .useValue({
         send: jest.fn().mockImplementation((pattern: string, payload: any) => {
@@ -25,7 +24,6 @@ describe('UsersController (e2e)', () => {
           }
         }),
       })
-      // Bypass del AuthGuard
       .overrideGuard(AuthGuard)
       .useValue({ canActivate: jest.fn(() => true) })
       .compile();
