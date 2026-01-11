@@ -27,6 +27,8 @@ This project demonstrates a **real-world backend system** built following indust
 
 ## 🧠 Architecture Overview
 
+![Architecture](./architecture/system-diagram.png)
+
 OrderFlow follows a **distributed microservices architecture** with the following design principles:
 
 - **API Gateway Pattern:** Single entry point for all client requests with routing and centralized authentication
