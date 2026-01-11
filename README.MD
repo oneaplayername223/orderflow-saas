@@ -27,12 +27,20 @@ This project demonstrates a **real-world backend system** built following indust
 
 ## 🧠 Architecture Overview
 
-- API Gateway as a single entry point
-- Independent microservices with clear responsibilities
-- Event-driven communication using RabbitMQ
-- Stateless authentication using JWT
-- Asynchronous email notifications
-- Designed with scalability and production patterns in mind
+<<<<<<< HEAD
+=======
+![Architecture](./architecture/system-diagram.png)
+
+>>>>>>> bbba8a236d99b83990d4d0f7003a3cf343944644
+OrderFlow follows a **distributed microservices architecture** with the following design principles:
+
+- **API Gateway Pattern:** Single entry point for all client requests with routing and centralized authentication
+- **Service Independence:** Each microservice owns its data and business logic
+- **Event-Driven Communication:** Asynchronous message-based communication via RabbitMQ
+- **Stateless Services:** All services are horizontally scalable with no shared session state
+- **JWT-Based Authentication:** Secure, stateless user authentication with HttpOnly cookies
+- **Database per Service:** Each microservice maintains its own isolated database
+- **Resilience:** Built-in error handling, retries, and graceful degradation
 
 ---
 
