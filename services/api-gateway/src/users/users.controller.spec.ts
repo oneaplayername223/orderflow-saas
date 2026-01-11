@@ -1,45 +1,140 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import request from 'supertest';
-import { UsersModule } from './users.module'; 
+import { UsersController } from './users.controller';
+import { ClientProxy } from '@nestjs/microservices';
 import { of } from 'rxjs';
-import { AuthGuard } from '../guards/auth/auth.guard';
+import { firstValueFrom } from 'rxjs';
 
-describe('UsersController (e2e)', () => {
-  let app: INestApplication;
+describe('UsersController (API Gateway)', () => {
+  let controller: UsersController;
+  let usersService: ClientProxy;
+
+  const mockUsersService = {
+    send: jest.fn().mockReturnValue(of({
+      company_name: 'TestCorp',
+      username: 'testuser',
+      email: 'test@example.com',
+    })),
+  };
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [UsersModule],
-    })
-      .overrideProvider('USERS_SERVICE')
-      .useValue({
-        send: jest.fn().mockImplementation((pattern: string, payload: any) => {
-          if (pattern === 'user-profile') {
-            return of({
-              company_name: 'TechCorp',
-              username: 'testuser',
-              email: 'test@example.com',
-            });
-          }
-        }),
-      })
-      .overrideGuard(AuthGuard)
-      .useValue({ canActivate: jest.fn(() => true) })
-      .compile();
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [UsersController],
+      providers: [
+        {
+          provide: 'USERS_SERVICE',
+          useValue: mockUsersService,
+        },
+      ],
+    }).compile();
 
-    app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-    await app.init();
+    controller = module.get<UsersController>(UsersController);
+    usersService = module.get<ClientProxy>('USERS_SERVICE');
+    jest.clearAllMocks();
   });
 
-  it('should return user profile', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/users/profile')
-      .expect(200);
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
 
-    expect(response.body).toHaveProperty('company_name', 'TechCorp');
-    expect(response.body).toHaveProperty('username', 'testuser');
-    expect(response.body).toHaveProperty('email', 'test@example.com');
+  describe('userProfile', () => {
+    it('should call users service with user accountId', async () => {
+      const mockReq = { user: { accountId: 1, userId: 5 } };
+
+      mockUsersService.send.mockReturnValue(of({
+        role: 'ADMIN',
+        status: 'ACTIVE',
+        company_name: 'TestCorp',
+        username: 'testuser',
+        email: 'test@example.com',
+      }));
+
+      const result = controller.userProfile(mockReq);
+      await firstValueFrom(result);
+
+      expect(mockUsersService.send).toHaveBeenCalledWith('user-profile', 1);
+    });
+
+    it('should return user profile data', async () => {
+      const mockReq = { user: { accountId: 2, userId: 10 } };
+      const expectedProfile = {
+        role: 'USER',
+        status: 'ACTIVE',
+        company_name: 'UserCorp',
+        username: 'john',
+        email: 'john@example.com',
+      };
+
+      mockUsersService.send.mockReturnValue(of(expectedProfile));
+
+      const result = controller.userProfile(mockReq);
+      const resolvedResult = await firstValueFrom(result);
+
+      expect(resolvedResult).toEqual(expectedProfile);
+    });
+
+    it('should handle missing user in request', async () => {
+      const mockReq = { user: undefined };
+
+      mockUsersService.send.mockReturnValue(of(null));
+
+      const result = controller.userProfile(mockReq);
+      await firstValueFrom(result);
+
+      expect(mockUsersService.send).toHaveBeenCalledWith('user-profile', undefined);
+    });
+
+    it('should pass correct accountId to service', async () => {
+      const testCases = [
+        { accountId: 1, userId: 5 },
+        { accountId: 99, userId: 50 },
+        { accountId: 42, userId: 100 },
+      ];
+
+      mockUsersService.send.mockReturnValue(of({ role: 'ADMIN', status: 'ACTIVE' }));
+
+      for (const testUser of testCases) {
+        const mockReq = { user: testUser };
+        const result = controller.userProfile(mockReq);
+        await firstValueFrom(result);
+        expect(mockUsersService.send).toHaveBeenCalledWith('user-profile', testUser.accountId);
+      }
+
+      expect(mockUsersService.send).toHaveBeenCalledTimes(3);
+    });
+
+    it('should handle service errors gracefully', async () => {
+      const mockReq = { user: { accountId: 1, userId: 5 } };
+
+      mockUsersService.send.mockReturnValue(of(null));
+
+      const result = controller.userProfile(mockReq);
+      const resolvedResult = await firstValueFrom(result);
+
+      expect(resolvedResult).toBeNull();
+    });
+
+    it('should return complete user profile with all fields', async () => {
+      const mockReq = { user: { accountId: 1, userId: 5 } };
+      const completeProfile = {
+        id: 1,
+        accountId: 1,
+        role: 'ADMIN',
+        status: 'ACTIVE',
+        company_name: 'AdminCorp',
+        username: 'admin',
+        email: 'admin@example.com',
+        createdAt: new Date(),
+      };
+
+      mockUsersService.send.mockReturnValue(of(completeProfile));
+
+      const result = controller.userProfile(mockReq);
+      const resolvedResult = await firstValueFrom(result);
+
+      expect(resolvedResult).toEqual(completeProfile);
+      expect(resolvedResult).toHaveProperty('role');
+      expect(resolvedResult).toHaveProperty('status');
+      expect(resolvedResult).toHaveProperty('company_name');
+    });
   });
 });
