@@ -46,7 +46,7 @@ export default function LoginPage() {
         {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
 
         <Button className="w-full" onClick={handleLogin}>
-          Entrar
+          Login
         </Button>
 
         <div className="mt-4 text-center">
@@ -54,7 +54,7 @@ export default function LoginPage() {
             onClick={() => router.push('/register')}
             className="text-sm text-blue-600 hover:underline"
           >
-            ¿No tienes cuenta? Regístrate
+            Don't have an account? Sign up
           </button>
         </div>
       </div>

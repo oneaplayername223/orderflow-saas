@@ -47,12 +47,12 @@ export default function DashboardPage() {
   async function fetchOrders(page: number) {
     const ordersData = await getMyOrders(10, page, dateFilter)
     setOrders(ordersData)
-    // Asumir que el backend devuelve totalPages, o calcular basado en length
-    // Por ahora, si ordersData.length < 10, es la última página
+    // Assume backend returns totalPages, or calculate based on length
+    // For now, if ordersData.length < 10, it's the last page
     if (ordersData.length < 10) {
       setTotalPages(page)
     } else {
-      setTotalPages(page + 1) // Estimado
+      setTotalPages(page + 1) // Estimated
     }
   }
 
@@ -91,10 +91,10 @@ export default function DashboardPage() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      // Normalizar ambas variantes de cancelado
-      CANCELED: { label: "Cancelado", color: "bg-red-100 text-red-800" },
-      CANCELLED: { label: "Cancelado", color: "bg-red-100 text-red-800" },
-      CONFIRMED: { label: "Confirmado", color: "bg-green-100 text-green-800" },
+      // Normalize both variants of canceled
+      CANCELED: { label: "Canceled", color: "bg-red-100 text-red-800" },
+      CANCELLED: { label: "Canceled", color: "bg-red-100 text-red-800" },
+      CONFIRMED: { label: "Confirmed", color: "bg-green-100 text-green-800" },
     }
 
     const config = statusConfig[status as keyof typeof statusConfig] || { label: status, color: "bg-slate-100 text-slate-800" }
@@ -107,7 +107,7 @@ export default function DashboardPage() {
   }
 
   const totalOrders = orders.length
-  // Mostrar canceladas en vez de pendientes
+  // Show canceled instead of pending
   const canceledOrders = orders.filter((o) => o.status === "CANCELED" || o.status === "CANCELLED").length
   const confirmedOrders = orders.filter((o) => o.status === "CONFIRMED").length
   const totalRevenue = orders
@@ -119,7 +119,7 @@ export default function DashboardPage() {
       <div className="flex min-h-screen items-center justify-center bg-gray-50">
         <div className="flex items-center gap-3">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-          <p className="text-lg text-gray-600">loading dashboard...</p>
+          <p className="text-lg text-gray-600">Loading dashboard...</p>
         </div>
       </div>
     )
@@ -174,7 +174,7 @@ export default function DashboardPage() {
               onClick={() => handleDateFilterChange({})}
               className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
             >
-              Limpiar Filtro
+              Clear Filter
             </button>
           </div>
         </div>
@@ -187,7 +187,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-600">Total Orders</p>
                 <p className="text-2xl font-bold">{totalOrders}</p>
                 <p className="text-xs text-gray-500">
-                  {dateFilter.startDate || dateFilter.endDate ? 'Filtered by date' : '+ ' + canceledOrders + ' canceled'}
+                  {dateFilter.startDate || dateFilter.endDate ? 'Filtered by date' : '+ ' + canceledOrders + ' canceled orders'}
                 </p>
               </div>
               <div className="text-blue-600">
@@ -204,7 +204,7 @@ export default function DashboardPage() {
                 <p className="text-sm font-medium text-gray-600">Confirmed</p>
                 <p className="text-2xl font-bold">{confirmedOrders}</p>
                 <p className="text-xs text-gray-500">
-                  {dateFilter.startDate || dateFilter.endDate ? 'Filtradas por fecha' : Math.round((confirmedOrders / totalOrders) * 100) + '% del total'}
+                  {dateFilter.startDate || dateFilter.endDate ? 'Filtered by date' : Math.round((confirmedOrders / totalOrders) * 100) + '% of total'}
                 </p>
               </div>
               <div className="text-green-600">
@@ -326,7 +326,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                           <p className="font-semibold">Order #{order.id}</p>
-                          <p className="text-sm text-gray-500">{order.createdAt || "Fecha no disponible"}</p>
+                          <p className="text-sm text-gray-500">{order.createdAt || "Date not available"}</p>
                         </div>
                       </div>
                       <div className="text-right">
@@ -348,8 +348,8 @@ export default function DashboardPage() {
                               className="bg-white border border-gray-300 rounded px-2 py-1 text-sm"
                               defaultValue=""
                             >
-                              <option value="" disabled>Cambiar Estado</option>
-                              <option value="CANCELLED">Cancelado</option>
+                              <option value="" disabled>Change Status</option>
+                              <option value="CANCELLED">Canceled</option>
                             </select>
                             <button
                               onClick={() => router.push(`/orders/checkout?orderId=${order.id}`)}

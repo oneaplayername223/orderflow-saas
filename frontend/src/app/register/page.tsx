@@ -18,7 +18,7 @@ export default function RegisterPage() {
     e.preventDefault();
     try {
       await register(form);
-      setMessage("Registro exitoso. Redirigiendo a login...");
+      setMessage("Registration successful. Redirecting to login...");
       setTimeout(() => router.push("/login"), 2000);
     } catch (err: any) {
       setMessage(err.message);
@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
   return (
     <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Registro</h1>
+      <h1 className="text-xl font-bold mb-4">Sign Up</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           className="border p-2 w-full"

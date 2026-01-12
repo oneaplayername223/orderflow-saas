@@ -15,7 +15,7 @@ export default function CreateOrderPage() {
 
   async function handleSubmit() {
     if (!referenceName || quantity < 1 || unitPrice <= 0) {
-      setMessage("Por favor completa todos los campos correctamente")
+      setMessage("Please complete all fields correctly")
       return
     }
 
@@ -38,9 +38,9 @@ export default function CreateOrderPage() {
 
       const order = await createOrder(payload)
       setCreatedOrder(order)
-      setMessage("Orden creada correctamente")
+      setMessage("Order created successfully")
     } catch (err: any) {
-      setMessage(err.message || "Error al crear la orden")
+      setMessage(err.message || "Error creating order")
     } finally {
       setIsLoading(false)
     }
@@ -77,7 +77,7 @@ export default function CreateOrderPage() {
               <label className="text-sm font-medium text-gray-700">Product Name</label>
               <input
                 type="text"
-                placeholder="Ej: Laptop HP Pavilion"
+                placeholder="E.g: HP Pavilion Laptop"
                 value={referenceName}
                 onChange={(e) => setReferenceName(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -194,8 +194,8 @@ export default function CreateOrderPage() {
                   <div key={index} className="p-3 bg-white rounded-lg border space-y-1">
                     <p className="text-gray-900 font-medium">{item.referenceName}</p>
                     <div className="flex justify-between text-sm text-gray-600">
-                      <span>Cantidad: {item.quantity}</span>
-                      <span>Precio: ${Number(item.unitPrice).toFixed(2)}</span>
+                      <span>Quantity: {item.quantity}</span>
+                      <span>Price: ${Number(item.unitPrice).toFixed(2)}</span>
                       <span className="text-gray-900 font-semibold">Subtotal: ${Number(item.subtotal).toFixed(2)}</span>
                     </div>
                   </div>

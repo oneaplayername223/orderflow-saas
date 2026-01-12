@@ -6,7 +6,7 @@ export async function register(data: { username: string; password: string; email
   });
 
   if (!res.ok) {
-    throw new Error("Error en registro");
+    throw new Error("Registration error");
   }
 
   return res.json();
@@ -19,7 +19,7 @@ export async function logout() {
   });
 
   if (!res.ok) {
-    throw new Error("Error en logout");
+    throw new Error("Logout error");
   }
 
   const contentType = res.headers.get("content-type") || "";
@@ -37,7 +37,7 @@ export async function getMe() {
   })
   console.log(res.body)
 
-  if (!res.ok) throw new Error("No autenticado")
+  if (!res.ok) throw new Error("Not authenticated")
   return res.json()
 }
 
@@ -60,7 +60,7 @@ async function request(
 
   if (!res.ok) {
     const error = await res.json().catch(() => ({}));
-    throw new Error(error.message || "Error en la petición");
+    throw new Error(error.message || "Request error");
   }
 
   return res.json();
@@ -70,12 +70,12 @@ export async function login(username: string, password: string) {
   const res = await fetch("http://localhost:3000/api/auth/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    credentials: "include", // 🔑 NECESARIO PARA COOKIE
+    credentials: "include", // 🔑 REQUIRED FOR COOKIE
     body: JSON.stringify({ username, password }),
   });
 
   if (!res.ok) {
-    throw new Error("Credenciales inválidas");
+    throw new Error("Invalid credentials");
   }
 
   return res.json();

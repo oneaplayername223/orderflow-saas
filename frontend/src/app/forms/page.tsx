@@ -36,30 +36,30 @@ export default function CreateOrderForm() {
       items,
     })
 
-    alert("Orden creada")
+    alert("Order created")
   }
 
   return (
     <form onSubmit={submit} className="space-y-4 max-w-xl">
-      <h2 className="text-xl font-bold">Create Orden</h2>
+      <h2 className="text-xl font-bold">Create Order</h2>
 
       {items.map((item, i) => (
         <div key={i} className="border p-3 rounded space-y-2">
           <input
-            placeholder="Referencia"
+            placeholder="Reference"
             value={item.referenceName}
             onChange={(e) => handleChange(i, "referenceName", e.target.value)}
           />
 
           <input
-            placeholder="Descripción"
+            placeholder="Description"
             value={item.description}
             onChange={(e) => handleChange(i, "description", e.target.value)}
           />
 
           <input
             type="number"
-            placeholder="Cantidad"
+            placeholder="Quantity"
             value={item.quantity}
             onChange={(e) =>
               handleChange(i, "quantity", Number(e.target.value))
@@ -68,7 +68,7 @@ export default function CreateOrderForm() {
 
           <input
             type="number"
-            placeholder="Precio unitario"
+            placeholder="Unit Price"
             value={item.unitPrice}
             onChange={(e) =>
               handleChange(i, "unitPrice", Number(e.target.value))
@@ -78,7 +78,7 @@ export default function CreateOrderForm() {
       ))}
 
       <button type="button" onClick={addItem}>
-        + Add ítem
+        + Add Item
       </button>
 
       <div>

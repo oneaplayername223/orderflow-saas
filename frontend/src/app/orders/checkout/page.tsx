@@ -38,7 +38,7 @@ export default function CheckoutPage() {
 
   async function handleCheckout() {
     if (!orderId || !orderDetails) {
-      setMessage("Por favor espera a que se carguen los detalles de la orden")
+      setMessage("Please wait for order details to load")
       return
     }
 
@@ -54,7 +54,7 @@ export default function CheckoutPage() {
       const res = await checkoutOrder(payload)
       setCheckoutData(res)
       setCheckoutSuccess(true)
-      setMessage("Pago procesado exitosamente")
+      setMessage("Payment processed successfully")
     } catch (err: any) {
       setMessage(`Error: ${err.message}`)
     } finally {
@@ -113,7 +113,7 @@ export default function CheckoutPage() {
               className="w-full mt-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg shadow-violet-500/25"
             >
               <ArrowLeft className="w-5 h-5" />
-               to Dashboard
+              Back to Dashboard
             </button>
           </div>
         </div>
