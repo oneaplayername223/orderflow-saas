@@ -2,12 +2,12 @@ import { Controller } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { Ctx, MessagePattern, Payload, RmqContext, RpcException } from '@nestjs/microservices';
 import { PaginationDto } from './dto/pagination.dto';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Controller()
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
     @MessagePattern('create-order')
-    
     async createOrder(@Payload() payload: any) {
 
         const order = await this.ordersService.create(payload);

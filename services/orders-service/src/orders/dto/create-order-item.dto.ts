@@ -1,5 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/library";
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import { Transform as TransformDecorator } from "class-transformer";
 
 export class CreateOrderItemDto {
   @IsNotEmpty()
@@ -16,8 +17,9 @@ export class CreateOrderItemDto {
   quantity: number;
 
   @IsNotEmpty()
-  unitPrice: number;
+  @TransformDecorator(({ value }) => new Decimal(value))
+  unitPrice: Decimal;
 
-  @IsNotEmpty()
-  subtotal: number;
+  @IsOptional()
+  subtotal?: Decimal;
 }

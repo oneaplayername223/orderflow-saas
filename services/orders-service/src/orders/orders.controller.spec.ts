@@ -47,7 +47,7 @@ describe('OrdersController', () => {
       const mockOrder = { id: 1, ...payload };
       mockOrdersService.create.mockResolvedValue(mockOrder);
 
-      const result = await controller.createOrder(payload);
+      const result = await controller.createOrder(payload as any);
 
       expect(result).toEqual(mockOrder);
       expect(service.create).toHaveBeenCalledWith(payload);
@@ -57,7 +57,7 @@ describe('OrdersController', () => {
       const payload = { user_id: { accountId: 1, userId: 5 }, items: [] };
       mockOrdersService.create.mockResolvedValue(null);
 
-      await expect(controller.createOrder(payload)).rejects.toThrow(RpcException);
+      await expect(controller.createOrder(payload as any)).rejects.toThrow(RpcException);
     });
   });
 

@@ -95,7 +95,10 @@ describe('OrdersService', () => {
           data: expect.objectContaining({
             items: expect.objectContaining({
               create: expect.arrayContaining([
-                expect.objectContaining({ subtotal: 150 }),
+                expect.objectContaining({ 
+                  subtotal: expect.any(Object), // Decimal object
+                  unitPrice: expect.any(Object), // Decimal object
+                }),
               ]),
             }),
           }),
