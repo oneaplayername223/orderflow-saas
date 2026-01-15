@@ -3,6 +3,7 @@ import { ClientProxy, Ctx } from '@nestjs/microservices';
 import { AuthGuard } from '../guards/auth/auth.guard';
 import { PaginationDto } from './dto/pagination.dto';
 import { updateStatusDto } from './dto/update-status.dto';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Controller('orders')
 export class OrdersController {
@@ -11,7 +12,7 @@ export class OrdersController {
 
   @Post('create')
   @UseGuards(AuthGuard)
-  createOrder(@Body() createOrderDto: any, @Req() req: any, @Ctx() context: any) {
+  createOrder(@Body() createOrderDto: CreateOrderDto, @Req() req: any, @Ctx() context: any) {
   
   const createOrder = {user_id: req.user, ...createOrderDto};
   return this.ordersService.send('create-order', createOrder);

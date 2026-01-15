@@ -44,7 +44,7 @@ describe('OrdersController (API Gateway)', () => {
 
       mockOrdersService.send.mockReturnValue(of({ id: 1, status: 'CREATED' }));
 
-      const result = controller.createOrder(createOrderDto, mockReq, {});
+      const result = controller.createOrder(createOrderDto as any, mockReq, {});
       const resolvedResult = await firstValueFrom(result);
 
       expect(mockOrdersService.send).toHaveBeenCalledWith('create-order', expect.objectContaining({
@@ -59,7 +59,7 @@ describe('OrdersController (API Gateway)', () => {
       const createOrderDto = { type: 'SALE', totalAmount: 250, items: [] };
       const mockReq = { user: { accountId: 2, userId: 10 } };
 
-      const result = controller.createOrder(createOrderDto, mockReq, {});
+      const result = controller.createOrder(createOrderDto as any, mockReq, {});
       await firstValueFrom(result);
 
       expect(mockOrdersService.send).toHaveBeenCalledWith('create-order', expect.objectContaining({
@@ -73,7 +73,7 @@ describe('OrdersController (API Gateway)', () => {
 
       mockOrdersService.send.mockReturnValue(of(null));
 
-      const result = controller.createOrder(createOrderDto, mockReq, {});
+      const result = controller.createOrder(createOrderDto as any, mockReq, {});
       const resolvedResult = await firstValueFrom(result);
 
       expect(resolvedResult).toBeNull();
