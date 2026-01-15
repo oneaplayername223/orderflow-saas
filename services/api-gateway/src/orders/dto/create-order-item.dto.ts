@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
 
 export class CreateOrderItemDto {
- /* @IsNotEmpty()
+ @IsNotEmpty()
   @IsString()
   referenceName: string;
 
@@ -15,8 +15,9 @@ export class CreateOrderItemDto {
   quantity: number;
 
   @IsNotEmpty()
-  unitPrice: Decimal;
+  @IsNumber()
+  unitPrice: number;
 
-  @IsNotEmpty()
-  subtotal: Decimal;*/
+  @IsOptional()
+  subtotal?: number;
 }
