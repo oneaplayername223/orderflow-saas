@@ -2,6 +2,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { PrismaService } from './prisma/prisma.service';
 import { OrderStatus, Prisma } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 @Injectable()
@@ -13,7 +14,18 @@ export class OrdersService {
   async create(payload: any) {
     const companyId = payload.user_id.accountId;
     const userId = payload.user_id.userId;
-    const createOrderDto: CreateOrderDto = payload;
+
+    const { user_id, ...dtoData } = payload;
+
+    const createOrderDto = {
+      ...dtoData,
+      totalAmount: new Decimal(dtoData.totalAmount),
+      items: dtoData.items.map((item: any) => ({
+        ...item,
+        unitPrice: new Decimal(item.unitPrice),
+        subtotal: new Decimal(item.quantity * Number(item.unitPrice))
+      }))
+    };
 
     return await this.prisma.order.create({
       data: {
@@ -24,20 +36,18 @@ export class OrdersService {
         assignedTo: createOrderDto.assignedTo,
         companyId,
         items: {
-          create: createOrderDto.items.map(item => ({
+          create: createOrderDto.items.map((item: any) => ({
             referenceName: item.referenceName,
             description: item.description,
             quantity: item.quantity,
             unitPrice: item.unitPrice,
-            subtotal: item.quantity * item.unitPrice,
-
+            subtotal: item.subtotal,
           })),
         },
       },
       include: {
         items: true,
       },
-
     });
   }
 
