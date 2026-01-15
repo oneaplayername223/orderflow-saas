@@ -8,7 +8,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
     @MessagePattern('create-order')
-    async createOrder(@Payload() payload: any) {
+    async createOrder(@Payload() payload: CreateOrderDto) {
 
         const order = await this.ordersService.create(payload);
         if (!order) {
