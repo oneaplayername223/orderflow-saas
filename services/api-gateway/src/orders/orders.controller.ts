@@ -2,7 +2,6 @@ import { Body, Controller, Get, Inject, Param, Patch, Post, Query, Req, UseGuard
 import { ClientProxy, Ctx } from '@nestjs/microservices';
 import { AuthGuard } from '../guards/auth/auth.guard';
 import { PaginationDto } from './dto/pagination.dto';
-import { updateStatusDto } from './dto/update-status.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 
 @Controller('orders')
