@@ -23,7 +23,9 @@ export class AuthController {
     res.cookie('flowToken', token, { httpOnly: true });
     return JSON.stringify(response.message);
   }
+  
   @Post('logout')
+  @HttpCode(200)
   logoutUser(@Res({ passthrough: true }) res: any) {
     res.clearCookie('flowToken');
     return { message: 'Logged out successfully' };
