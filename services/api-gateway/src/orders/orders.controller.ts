@@ -9,7 +9,7 @@ export class OrdersController {
   constructor(@Inject('ORDERS_SERVICE') private readonly ordersService: ClientProxy) {}
 
 
-  @Post('create')
+  @Post()
   @UseGuards(AuthGuard)
   createOrder(@Body() createOrderDto: CreateOrderDto, @Req() req: any, @Ctx() context: any) {
   
