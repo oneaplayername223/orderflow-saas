@@ -1,0 +1,23 @@
+services:
+  
+  server:
+    build:
+      context: .
+    container_name: pdf_service
+    command: npm run start:dev
+    environment:
+      NODE_ENV: development
+      RABBITMQ_URL: amqp://rabbitmq:5672
+    ports:
+      - 7000:3007
+    volumes:
+      - ./facturas:/usr/src/app/facturas
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks: 
+      - rabbitmq-network
+  
+  
+networks: 
+  rabbitmq-network: 
+    external: true
