@@ -6,6 +6,7 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache openssl
 # Copiamos primero package.json y package-lock.json
 COPY package*.json ./
+ENV DATABASE_URL='postgres://postgres:postgres@db:5432/orders_db'
 # Instalamos TODAS las dependencias (incluyendo dev)
 RUN npm install
 
@@ -13,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exponemos el puerto
-EXPOSE 5000
+EXPOSE 6001
 
 # Ajustamos permisos para el usuario node
 RUN chown -R node:node /usr/src/app
