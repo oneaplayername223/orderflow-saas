@@ -12,7 +12,7 @@ describe('OrdersService', () => {
   let notificationService: ClientProxy;
 
   const mockPrisma = {
-    order: {
+    orders: {
       create: jest.fn(),
       findUnique: jest.fn(),
       findMany: jest.fn(),
@@ -68,11 +68,11 @@ describe('OrdersService', () => {
         items: [{ id: 1, referenceName: 'Item1', description: 'Desc1', quantity: 2, unitPrice: 50, subtotal: 100 }],
       };
 
-      mockPrisma.order.create.mockResolvedValue(mockOrder);
+      mockPrisma.orders.create.mockResolvedValue(mockOrder);
 
       const result = await service.create(payload);
 
-      expect(mockPrisma.order.create).toHaveBeenCalled();
+      expect(mockPrisma.orders.create).toHaveBeenCalled();
       expect(result).toEqual(mockOrder);
     });
 
@@ -86,11 +86,11 @@ describe('OrdersService', () => {
         ],
       };
 
-      mockPrisma.order.create.mockResolvedValue({ id: 1, ...payload });
+      mockPrisma.orders.create.mockResolvedValue({ id: 1, ...payload });
 
       await service.create(payload);
 
-      expect(mockPrisma.order.create).toHaveBeenCalledWith(
+      expect(mockPrisma.orders.create).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({
             items: expect.objectContaining({
@@ -114,7 +114,7 @@ describe('OrdersService', () => {
         items: [],
       };
 
-      mockPrisma.order.create.mockRejectedValue(new Error('Database error'));
+      mockPrisma.orders.create.mockRejectedValue(new Error('Database error'));
 
       await expect(service.create(payload)).rejects.toThrow('Database error');
     });
@@ -129,12 +129,12 @@ describe('OrdersService', () => {
       };
 
       const mockOrder = { id: 1, status: OrderStatus.IN_PROGRESS };
-      mockPrisma.order.update.mockResolvedValue(mockOrder);
+      mockPrisma.orders.update.mockResolvedValue(mockOrder);
 
       const result = await service.updateOrder(payload);
 
       expect(result).toEqual(mockOrder);
-      expect(mockPrisma.order.update).toHaveBeenCalled();
+      expect(mockPrisma.orders.update).toHaveBeenCalled();
     });
 
     it('should throw error if trying to complete order', async () => {
@@ -166,7 +166,7 @@ describe('OrdersService', () => {
         quantity: 2,
       };
 
-      mockPrisma.order.update.mockResolvedValue({ id: 1, status: 'CONFIRMED' });
+      mockPrisma.orders.update.mockResolvedValue({ id: 1, status: 'CONFIRMED' });
       mockPrisma.orderItem.findMany.mockResolvedValue([
         { id: 1, quantity: 5, subtotal: '100' },
         { id: 2, quantity: 3, subtotal: '60' },
@@ -198,7 +198,7 @@ describe('OrdersService', () => {
         quantity: 2,
       };
 
-      mockPrisma.order.update.mockResolvedValue(null);
+      mockPrisma.orders.update.mockResolvedValue(null);
 
       await expect(service.checkoutOrder(payload)).rejects.toThrow(RpcException);
     });
@@ -210,7 +210,7 @@ describe('OrdersService', () => {
         quantity: 100,
       };
 
-      mockPrisma.order.update.mockResolvedValue({ id: 1, status: 'CONFIRMED' });
+      mockPrisma.orders.update.mockResolvedValue({ id: 1, status: 'CONFIRMED' });
       mockPrisma.orderItem.findMany.mockResolvedValue([
         { id: 1, quantity: 5, subtotal: '100' },
       ]);
@@ -228,7 +228,7 @@ describe('OrdersService', () => {
         items: [{ unitPrice: '50', subtotal: '100' }],
       };
 
-      mockPrisma.order.findUnique.mockResolvedValue(mockOrder);
+      mockPrisma.orders.findUnique.mockResolvedValue(mockOrder);
 
       const result = await service.getOrder(payload);
 
@@ -239,14 +239,14 @@ describe('OrdersService', () => {
 
     it('should throw error if order not found', async () => {
       const payload = { orderId: 999, userId: 1 };
-      mockPrisma.order.findUnique.mockResolvedValue(null);
+      mockPrisma.orders.findUnique.mockResolvedValue(null);
 
       await expect(service.getOrder(payload)).rejects.toThrow(RpcException);
     });
 
     it('should convert decimal prices to numbers', async () => {
       const payload = { orderId: 1, userId: 1 };
-      mockPrisma.order.findUnique.mockResolvedValue({
+      mockPrisma.orders.findUnique.mockResolvedValue({
         id: 1,
         totalAmount: '250.50',
         items: [
@@ -275,12 +275,12 @@ describe('OrdersService', () => {
         { id: 2, totalAmount: '200', createdAt: new Date() },
       ];
 
-      mockPrisma.order.findMany.mockResolvedValue(mockOrders);
+      mockPrisma.orders.findMany.mockResolvedValue(mockOrders);
 
       const result = await service.getOrders(payload);
 
       expect(result).toHaveLength(2);
-      expect(mockPrisma.order.findMany).toHaveBeenCalledWith(
+      expect(mockPrisma.orders.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           take: 10,
           skip: 0,
@@ -295,11 +295,11 @@ describe('OrdersService', () => {
         dateFilter: { startDate: '2024-01-01', endDate: '2024-12-31' },
       };
 
-      mockPrisma.order.findMany.mockResolvedValue([]);
+      mockPrisma.orders.findMany.mockResolvedValue([]);
 
       await service.getOrders(payload);
 
-      expect(mockPrisma.order.findMany).toHaveBeenCalledWith(
+      expect(mockPrisma.orders.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
             createdAt: expect.any(Object),
@@ -315,11 +315,11 @@ describe('OrdersService', () => {
         dateFilter: {},
       };
 
-      mockPrisma.order.findMany.mockResolvedValue([]);
+      mockPrisma.orders.findMany.mockResolvedValue([]);
 
       await service.getOrders(payload);
 
-      expect(mockPrisma.order.findMany).toHaveBeenCalledWith(
+      expect(mockPrisma.orders.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           skip: 40, // (3 - 1) * 20
           take: 20,
@@ -334,7 +334,7 @@ describe('OrdersService', () => {
         dateFilter: {},
       };
 
-      mockPrisma.order.findMany.mockResolvedValue([
+      mockPrisma.orders.findMany.mockResolvedValue([
         { id: 1, totalAmount: '100.50', createdAt: new Date() },
       ]);
 
