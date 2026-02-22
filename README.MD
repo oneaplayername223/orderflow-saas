@@ -92,6 +92,7 @@ OrderFlow follows a **distributed microservices architecture** with the followin
 | Orders Service | Orders, items, order lifecycle | 3003 |
 | Payments Service | Checkout and payment processing | 3004 |
 | Notifications Service | Security and transactional emails | 3005 |
+| PDF Service | PDF generation for invoices and receipts | 3007 |
 
 ---
 
@@ -226,8 +227,9 @@ OrderFlow includes a **comprehensive test suite** with **143+ tests** across all
 | orders-service | 3 | 29 | ✅ PASS |
 | payments-service | 2 | 14 | ✅ PASS |
 | notification-service | 2 | 28 | ✅ PASS |
+| pdf-service | 3 | 28 | ✅ PASS |
 | api-gateway | 5 | 36 | ✅ PASS |
-| **TOTAL** | **17** | **143** | **✅ ALL PASS** |
+| **TOTAL** | **20** | **171** | **✅ ALL PASS** |
 
 ### Test Types
 
@@ -321,7 +323,12 @@ cd services/notification-service
 npm install
 npm run start:dev
 
-# Terminal 9: Frontend
+# Terminal 9: PDF Service
+cd services/pdf-service
+npm install
+npm run start:dev
+
+# Terminal 10: Frontend
 cd frontend
 npm install
 npm run dev
@@ -330,7 +337,7 @@ npm run dev
 ### Database Setup
 
 ```bash
-# Run migrations for each service
+# Run migrations for each service (except pdf-service which doesn't use database)
 cd services/auth-service
 npx prisma migrate dev
 
@@ -356,7 +363,8 @@ OrderFlow-SaaS/
 │   ├── users-service/           # User management microservice
 │   ├── orders-service/          # Order management microservice
 │   ├── payments-service/        # Payment processing microservice
-│   └── notification-service/    # Email notifications microservice
+│   ├── notification-service/    # Email notifications microservice
+│   └── pdf-service/             # PDF generation microservice
 ├── frontend/                    # Next.js frontend application
 ├── docs/                        # Documentation
 └── docker-compose.yml           # Multi-container orchestration
@@ -393,6 +401,11 @@ POST   /orders/:id/checkout    # Initiate checkout
 ```
 POST   /payments/checkout      # Process payment
 GET    /payments/:id           # Get payment status
+```
+
+### PDFs
+```
+POST   /pdfs/generate          # Generate invoice/receipt PDF
 ```
 
 ---
