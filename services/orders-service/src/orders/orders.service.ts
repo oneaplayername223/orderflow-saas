@@ -28,7 +28,7 @@ export class OrdersService {
     };
 
     
-    return await this.prisma.order.create({
+    return await this.prisma.orders.create({
       data: {
         type: createOrderDto.type,
         status: createOrderDto.status || OrderStatus.CREATED,
@@ -62,7 +62,7 @@ if (status === OrderStatus.CONFIRMED) throw new RpcException('You cannot change 
 
 const {updateStatusDto} = payload
  const id = Number(payload.orderId)
-const order = await this.prisma.order.update({where: {id: id, companyId: userId}, data: {status}});
+const order = await this.prisma.orders.update({where: {id: id, companyId: userId}, data: {status}});
 
 if (!order) throw new RpcException('Order not found');
 
@@ -75,7 +75,7 @@ const status = 'CONFIRMED'
 const orderQuantity = Number(payload.quantity)
 
 if (!orderQuantity) throw new RpcException('Order quantity is not valid');
-const order = await this.prisma.order.update({where: {id: Number(payload.orderId), companyId: Number(companyId)}, data: {status}});
+const order = await this.prisma.orders.update({where: {id: Number(payload.orderId), companyId: Number(companyId)}, data: {status}});
 
 if (!order) throw new RpcException('Order not found');
 
@@ -89,7 +89,7 @@ const orderItem = await this.prisma.orderItem.updateMany({where: {orderId: order
 
 if (!orderItem) throw new RpcException('Order not found');
 
-const paymentsPayload = {orderItemPrice, companyId, orderId, quantity, status, date: new Date()};
+const paymentsPayload = {orderItems, orderItemPrice, companyId, orderId, orderQuantity, status, date: new Date()};
 this.notificationService.emit('order-confirmed-notification', paymentsPayload)
 this.paymentsService.emit('checkout-payment', paymentsPayload)
 
@@ -103,7 +103,7 @@ return {
 
 async getOrder(payload: any) {
 const {orderId, userId} = payload
-const order = await this.prisma.order.findUnique({where: {id: Number(orderId), companyId: Number(userId)}, include: {items: true}});
+const order = await this.prisma.orders.findUnique({where: {id: Number(orderId), companyId: Number(userId)}, include: {items: true}});
 
 if (!order) throw new RpcException('Order not found');
 
@@ -136,7 +136,7 @@ const {user_id, dateFilter} = Payload
    }
  }
 
- const query = await this.prisma.order.findMany({
+ const query = await this.prisma.orders.findMany({
    where: whereClause,
    take: limit,
    skip: (page - 1) * limit,

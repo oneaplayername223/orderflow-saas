@@ -31,7 +31,7 @@ enum OrderType {
   TASK
 }
 
-model Order {
+model orders {
   id            Int          @id @default(autoincrement())
   companyId     Int
   type          OrderType
@@ -60,7 +60,7 @@ model OrderItem {
   unitPrice     Decimal   @db.Decimal(10, 2)
   subtotal      Decimal   @db.Decimal(10, 2)
 
-  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order         orders     @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
 }

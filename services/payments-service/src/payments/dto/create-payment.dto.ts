@@ -11,5 +11,7 @@ export class CreatePaymentDto {
     @IsNumber()
     @IsNotEmpty()
     orderId: number;
+    orderItems: any;
+    orderQuantity: number;
 }
 

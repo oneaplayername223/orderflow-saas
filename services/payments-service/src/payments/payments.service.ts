@@ -4,18 +4,23 @@ import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 @Injectable()
 export class PaymentsService {
-constructor(private prisma: PrismaService, @Inject('NOTIFICATION_SERVICE') private readonly notificationService: ClientProxy) {}
+constructor(private prisma: PrismaService, @Inject('NOTIFICATION_SERVICE') private readonly notificationService: ClientProxy,
+@Inject('PDF_SERVICE') private readonly pdfService: ClientProxy) {}
 async checkoutPayment(data: CreatePaymentDto) {
 try {
-const {orderItemPrice, companyId, orderId} = data
+const {orderItemPrice, companyId, orderQuantity, orderId} = data
 const provider = 'MOCK'
 const currency = 'DOP'
 const status = 'PAID'
+const {referenceName, description, quantity, unitPrice, subtotal} = data.orderItems?.[0] || {}
 
-await this.prisma.payment.create({data: {amount: orderItemPrice, companyId, orderId, currency: currency, status: status, provider}});
+const payment = await this.prisma.payment.create({data: {amount: orderItemPrice, companyId, orderId, currency: currency, status: status, provider}});
+const paymentId = payment.id
 this.notificationService.emit('payment-created-notification', {orderItemPrice, companyId, orderId, currency, status, provider});
-return { message: 'Payment created successfully' };
 
+ const pdf = await this.pdfService.send('checkout_pdf', {referenceName, description, orderQuantity, unitPrice, subtotal, orderItemPrice, companyId, orderId, currency, status, provider, paymentId});
+
+return pdf
 } catch (error) {
     const {orderItemPrice, companyId, orderId} = data
 

@@ -14,7 +14,7 @@ export class OrdersController {
         if (!order) {
             throw new RpcException('Order not created');
         }
-       return `Order created successfully with id ${order.id}`;
+       return order
 
     }
 
