@@ -17,7 +17,6 @@ const {referenceName, description, quantity, unitPrice, subtotal} = data.orderIt
 const payment = await this.prisma.payment.create({data: {amount: orderItemPrice, companyId, orderId, currency: currency, status: status, provider}});
 const paymentId = payment.id
 this.notificationService.emit('payment-created-notification', {orderItemPrice, companyId, orderId, currency, status, provider});
-
  const pdf = await this.pdfService.send('checkout_pdf', {referenceName, description, orderQuantity, unitPrice, subtotal, orderItemPrice, companyId, orderId, currency, status, provider, paymentId});
 
 return pdf

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Patch, Post, Query, Req, SetMetadata, UseGuards } from '@nestjs/common';
 import { ClientProxy, Ctx } from '@nestjs/microservices';
 import { AuthGuard } from '../guards/auth/auth.guard';
 import { PaginationDto } from './dto/pagination.dto';
@@ -19,6 +19,8 @@ export class OrdersController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @SetMetadata('roles', ['USER', 'NORMAL', 'PRO', 'ENTERPRISE', 'TRIAL'])
+
   async getOrders(@Req() req: any, @Query('limit') limit: PaginationDto, @Query('page') page: PaginationDto, @Query('startDate') startDate?: string, @Query('endDate') endDate?: string) {
     const pagination = {limit: limit? limit : 10, page: page? page : 1};
     const user_id = req.user?.accountId

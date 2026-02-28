@@ -23,7 +23,8 @@ dotenv.config();
           urls: [process.env.RABBITMQ_URL as string || 'amqp://rabbitmq:5672'],
           queue: 'pdf_queue',
         },
-      }
+      },
+
     ])
   ],
   controllers: [PaymentsController],

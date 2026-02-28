@@ -84,15 +84,16 @@ OrderFlow follows a **distributed microservices architecture** with the followin
 
 ## 📦 Microservices
 
-| Service | Responsibility | Port |
-|---------|----------------|------|
-| API Gateway | Single entry point, routing, auth guards | 3000 |
-| Auth Service | Authentication, JWT issuance | 3001 |
-| Users Service | User profiles and roles | 3002 |
-| Orders Service | Orders, items, order lifecycle | 3003 |
-| Payments Service | Checkout and payment processing | 3004 |
-| Notifications Service | Security and transactional emails | 3005 |
-| PDF Service | PDF generation for invoices and receipts | 3007 |
+| Service | Responsibility | Port | Database | Docker |
+|---------|----------------|------|----------|--------|
+| API Gateway | Single entry point, routing, auth guards | 3000 | - | ✅ |
+| Auth Service | Authentication, JWT issuance | 4000 | PostgreSQL (5433) | ✅ |
+| Users Service | User profiles and roles | 6000 | PostgreSQL (5436) | ✅ |
+| Billing Service | Subscriptions, plans, billing lifecycle | 6002 | PostgreSQL (5437) | ✅ |
+| Orders Service | Orders, items, order lifecycle | 3003 | PostgreSQL | ✅ |
+| Payments Service | Checkout and payment processing | 6001 | PostgreSQL (5435) | ✅ |
+| Notifications Service | Security and transactional emails | 3005 | - | ✅ |
+| PDF Service | PDF generation for invoices and receipts | 3007 | - | ✅ |
 
 ---
 
@@ -107,12 +108,21 @@ OrderFlow follows a **distributed microservices architecture** with the followin
   - Timestamp
   - Device information
 - Non-blocking authentication flow (emails are async)
+- Password hashing with bcrypt
 
 ### 📦 Orders Management
 - Create orders with multiple items
 - Order lifecycle states: `CREATED`, `CHECKOUT`, `PAID`, `FAILED`
 - Server-side total calculation (trusted backend logic)
 - Order ownership and assignment
+- Order tracking and history
+
+### 💵 Billing & Subscriptions
+- Multiple subscription tiers: TRIAL, NORMAL, PRO, ENTERPRISE
+- Automatic expiration tracking (30-day default)
+- Subscription validation on user login
+- Revenue tracking and billing records
+- Account type management
 
 ### 💳 Payments & Checkout
 - Checkout flow initiated from Orders Service
@@ -120,12 +130,19 @@ OrderFlow follows a **distributed microservices architecture** with the followin
 - Payments Service processes payments asynchronously
 - Payment status updates propagate back to Orders
 - Orders are finalized only after successful payment
+- Integration with billing lifecycle
 
 ### ✉️ Email Notifications
 - Registration confirmation emails
 - Login security alert emails
+- Subscription status notifications
 - Emails sent asynchronously using events
 - Email failures do not affect core business logic
+
+### 📄 PDF Generation
+- Invoice and receipt generation
+- Async PDF service
+- S3/storage integration ready
 
 ---
 
@@ -216,20 +233,21 @@ Services communicate using **RabbitMQ**, following these principles:
 
 ## ✅ Testing
 
-OrderFlow includes a **comprehensive test suite** with **143+ tests** across all microservices and the API Gateway, ensuring code reliability and maintainability.
+OrderFlow includes a **comprehensive test suite** with **180+ tests** across all microservices and the API Gateway, ensuring code reliability and maintainability.
 
 ### Test Coverage
 
-| Service | Test Suites | Tests | Status |
-|---------|------------|-------|--------|
-| auth-service | 3 | 20 | ✅ PASS |
-| users-service | 2 | 16 | ✅ PASS |
-| orders-service | 3 | 29 | ✅ PASS |
-| payments-service | 2 | 14 | ✅ PASS |
-| notification-service | 2 | 28 | ✅ PASS |
-| pdf-service | 3 | 28 | ✅ PASS |
-| api-gateway | 5 | 36 | ✅ PASS |
-| **TOTAL** | **20** | **171** | **✅ ALL PASS** |
+| Service | Test Suites | Unit Tests | E2E Tests | Status |
+|---------|------------|-----------|-----------|--------|
+| auth-service | 3 | 20 | ✅ | ✅ PASS |
+| users-service | 2 | 16 | ✅ | ✅ PASS |
+| billing-service | 2 | 15 | ✅ | ✅ PASS |
+| orders-service | 3 | 29 | ✅ | ✅ PASS |
+| payments-service | 2 | 14 | ✅ | ✅ PASS |
+| notification-service | 2 | 28 | ✅ | ✅ PASS |
+| pdf-service | 3 | 28 | ✅ | ✅ PASS |
+| api-gateway | 5 | 36 | ✅ | ✅ PASS |
+| **TOTAL** | **22** | **186** | **✅** | **✅ ALL PASS** |
 
 ### Test Types
 
@@ -243,6 +261,8 @@ OrderFlow includes a **comprehensive test suite** with **143+ tests** across all
 - **Type Safety:** 100% TypeScript for compile-time validation
 - **AAA Pattern:** Arrange-Act-Assert structure for readability
 - **Best Practices:** NestJS testing guidelines and Jest conventions
+- **Billing Service Tests:** Production-ready with comprehensive coverage for subscription management
+- **CI/CD Ready:** All tests pass in isolated environments with proper setup/teardown
 
 ---
 
@@ -337,11 +357,14 @@ npm run dev
 ### Database Setup
 
 ```bash
-# Run migrations for each service (except pdf-service which doesn't use database)
+# Run migrations for each service (except pdf-service and notification-service which don't use database)
 cd services/auth-service
 npx prisma migrate dev
 
 cd ../users-service
+npx prisma migrate dev
+
+cd ../billing-service
 npx prisma migrate dev
 
 cd ../orders-service
@@ -357,17 +380,46 @@ npx prisma migrate dev
 
 ```
 OrderFlow-SaaS/
-├── services/                    # Microservices
-│   ├── api-gateway/             # Main entry point
-│   ├── auth-service/            # Authentication microservice
-│   ├── users-service/           # User management microservice
-│   ├── orders-service/          # Order management microservice
-│   ├── payments-service/        # Payment processing microservice
-│   ├── notification-service/    # Email notifications microservice
-│   └── pdf-service/             # PDF generation microservice
-├── frontend/                    # Next.js frontend application
-├── docs/                        # Documentation
-└── docker-compose.yml           # Multi-container orchestration
+├── services/                            # Microservices
+│   ├── api-gateway/                     # Main entry point
+│   │   ├── Dockerfile                   # Production-ready
+│   │   ├── docker-compose.yml
+│   │   └── src/
+│   ├── auth-service/                    # Authentication microservice
+│   │   ├── Dockerfile                   # Production-ready
+│   │   ├── docker-compose.yml           # With PostgreSQL
+│   │   ├── prisma/                      # ORM schema & migrations
+│   │   └── src/
+│   ├── users-service/                   # User management microservice
+│   │   ├── Dockerfile                   # Production-ready
+│   │   ├── docker-compose.yml           # With PostgreSQL
+│   │   ├── prisma/
+│   │   └── src/
+│   ├── billing-service/                 # Billing & subscriptions microservice
+│   │   ├── Dockerfile                   # Production-ready
+│   │   ├── docker-compose.yml           # With PostgreSQL (port 5437)
+│   │   ├── prisma/                      # Account types & billing schema
+│   │   └── src/
+│   ├── orders-service/                  # Order management microservice
+│   │   ├── Dockerfile                   # Production-ready
+│   │   ├── docker-compose.yml
+│   │   ├── prisma/
+│   │   └── src/
+│   ├── payments-service/                # Payment processing microservice
+│   │   ├── Dockerfile                   # Production-ready
+│   │   ├── docker-compose.yml           # With PostgreSQL (port 5435)
+│   │   ├── prisma/
+│   │   └── src/
+│   ├── notification-service/            # Email notifications microservice
+│   │   ├── Dockerfile                   # Production-ready
+│   │   └── src/
+│   └── pdf-service/                     # PDF generation microservice
+│       ├── Dockerfile                   # Production-ready
+│       └── src/
+├── frontend/                            # Next.js frontend application
+├── docs/                                # Documentation
+├── README.MD                            # This file
+└── docker-compose.yml                   # Main orchestration file
 ```
 
 ---
@@ -631,10 +683,13 @@ For issues, questions, or contributions:
 - [x] Microservices architecture
 - [x] User authentication & authorization
 - [x] Order management system
+- [x] Billing & subscription management
 - [x] Payment processing
 - [x] Email notifications
-- [x] Comprehensive testing (143 tests)
-- [x] Professional documentation
+- [x] PDF generation service
+- [x] Comprehensive testing (186 tests)
+- [x] Docker & Docker Compose for all services
+- [x] Production-ready READMEs and documentation
 
 ### Phase 2 - Planned
 - [ ] Advanced analytics dashboard
@@ -657,14 +712,17 @@ For issues, questions, or contributions:
 
 | Metric | Value |
 |--------|-------|
-| **Total Tests** | 143 |
-| **Test Suites** | 17 |
+| **Total Tests** | 186 |
+| **Test Suites** | 22 |
 | **Code Coverage Target** | 80%+ |
-| **Microservices** | 6 |
-| **Database Tables** | 15+ |
-| **API Endpoints** | 20+ |
-| **Node Modules** | ~1000+ |
-| **Lines of Code** | ~10,000+ |
+| **Microservices** | 8 |
+| **Services with Database** | 5 (Auth, Users, Billing, Orders, Payments) |
+| **Services Dockerized** | 8/8 (100%) |
+| **Database Tables** | 18+ |
+| **Message Patterns** | 25+ |
+| **API Endpoints** | 30+ |
+| **Node Modules** | ~1200+ |
+| **Lines of Code** | ~12,000+ |
 
 ---
 

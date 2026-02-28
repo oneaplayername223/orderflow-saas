@@ -12,13 +12,15 @@ dotenv.config();
 export class AuthService {
     constructor(private prisma: PrismaService, 
     @Inject('NOTIFICATION_SERVICE') private readonly notificationService: ClientProxy,
-    @Inject('USERS_SERVICE') private readonly usersService: ClientProxy
+    @Inject('USERS_SERVICE') private readonly usersService: ClientProxy,
+    @Inject('BILLING_SERVICE') private readonly billingService: ClientProxy
   ) {}
     async registerUser(registerUserDto: RegisterUserDto) {
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
     const query = await this.prisma.account.create({ data: {  ...registerUserDto, password: hashedPassword, } });
     this.notificationService.emit('register-notification', registerUserDto);
     await this.usersService.emit('create-user', query.id);
+    await this.billingService.emit('create-billing', query.id);
     return {
       message: 'User registered successfully',
     };
@@ -51,8 +53,17 @@ async loginUser(loginUserDto: LoginUserDto) {
       this.notificationService.emit('login-failed-notification', user);
       throw new RpcException('User is not active');
     }
-    //I didn't create a refreshToken because I don't feel like it
-    const token = await jwt.sign({ accountId: user.id, userId: user.userId, role: role, status: status}, process.env.HASH_SECRET_KEY as string, { expiresIn: '7d' });
+
+     const billing = await firstValueFrom(this.billingService.send('get-billing', {accountId: user.id, email: user.email}));
+    if (billing.success === false) {
+      this.notificationService.emit('billing-expired-notification', user);
+      throw new RpcException('Billing expired');
+    }
+    const accountType = billing.success.query.accountType
+    const expireAt = billing.success.query.expireAt;
+    const createdAt = billing.success.query.createdAt;
+    
+    const token = await jwt.sign({ accountId: user.id, userId: user.userId, role: role, status: status, accountType, billing, expireAt, createdAt }, process.env.HASH_SECRET_KEY as string, { expiresIn: '7d' });
     return {
       message: 'User logged in successfully',
       token

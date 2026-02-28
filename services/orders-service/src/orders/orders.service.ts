@@ -93,6 +93,7 @@ const paymentsPayload = {orderItems, orderItemPrice, companyId, orderId, orderQu
 this.notificationService.emit('order-confirmed-notification', paymentsPayload)
 this.paymentsService.emit('checkout-payment', paymentsPayload)
 
+
 return { 
   orderId: payload.orderId, 
   quantity: orderQuantity, 

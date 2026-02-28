@@ -16,6 +16,7 @@ describe('AuthController', () => {
             registerUser: jest.fn(),
             loginUser: jest.fn(),
             getUserProfile: jest.fn(),
+            
           },
         },
       ],

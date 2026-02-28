@@ -23,7 +23,16 @@ dotenv.config();
           urls: [process.env.RABBITMQ_URL as string],
           queue: 'users_queue',
         },
-      }
+      },
+      {
+        name: 'BILLING_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: [process.env.RABBITMQ_URL as string],
+          queue: 'billing_queue',
+        },
+      },
+
     ]),
   ],
   controllers: [AuthController],

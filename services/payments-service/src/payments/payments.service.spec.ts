@@ -27,6 +27,7 @@ describe('PaymentsService', () => {
     send: jest.fn().mockReturnValue(of({ message: 'PDF created' })),
   };
 
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [

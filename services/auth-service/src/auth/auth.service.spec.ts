@@ -21,11 +21,16 @@ describe('AuthService', () => {
   const mockNotificationService = {
     emit: jest.fn().mockReturnValue(of(true)),
   };
+  const mockBillingService = {
+    send: jest.fn().mockReturnValue(of({ success: true })),
+    emit: jest.fn().mockReturnValue(of(true)),
+  };
 
   const mockUsersService = {
     send: jest.fn().mockReturnValue(of({ role: 'USER', status: 'ACTIVE' })),
     emit: jest.fn().mockReturnValue(of(true)),
   };
+
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -34,8 +39,10 @@ describe('AuthService', () => {
         { provide: PrismaService, useValue: mockPrisma },
         { provide: 'NOTIFICATION_SERVICE', useValue: mockNotificationService },
         { provide: 'USERS_SERVICE', useValue: mockUsersService },
+        { provide: 'BILLING_SERVICE', useValue: mockBillingService },
       ],
     }).compile();
+
 
     service = module.get<AuthService>(AuthService);
     prisma = module.get<PrismaService>(PrismaService);

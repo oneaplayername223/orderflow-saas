@@ -5,11 +5,12 @@ import { PaymentsModule } from './payments/payments.module';
 import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
 import { PdfsModule } from './pdfs/pdfs.module';
+import { BillingModule } from './billing/billing.module';
 import { config } from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [AuthModule, NotificationsModule, PaymentsModule, UsersModule, OrdersModule, PdfsModule, 
+  imports: [AuthModule, NotificationsModule, PaymentsModule, UsersModule, OrdersModule, PdfsModule, BillingModule, 
     ConfigModule.forRoot ({
       envFilePath: '.env',
       isGlobal: true
