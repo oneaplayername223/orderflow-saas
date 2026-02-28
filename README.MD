@@ -28,7 +28,7 @@ This project demonstrates a **real-world backend system** built following indust
 ## 🧠 Architecture Overview
 
 =======
-![Architecture](./architecture/system-diagram.png)
+![Architecture](./architecture/system-diagram.svg)
 
 OrderFlow follows a **distributed microservices architecture** with the following design principles:
 
