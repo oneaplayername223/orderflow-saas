@@ -63,7 +63,7 @@ export default function CheckoutPage() {
   }
 
   const totalQuantity = orderDetails && orderDetails.items
-    ? orderDetails.items.reduce((total, item) => total + Number(item.quantity), 0)
+    ? orderDetails.items.reduce((total: number, item: any) => total + Number(item.quantity), 0)
     : 0
   const estimatedTotal = orderDetails ? Number(orderDetails.totalAmount) : 0
 

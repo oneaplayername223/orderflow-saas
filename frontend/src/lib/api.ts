@@ -85,7 +85,7 @@ export async function login(username: string, password: string) {
 /* ---------- ORDERS ---------- */
 
 export function createOrder(data: unknown) {
-  return request(`/orders/create`, {
+  return request(`/orders/`, {
     method: "POST",
     body: JSON.stringify(data),
   });
