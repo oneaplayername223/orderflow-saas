@@ -2,16 +2,17 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import { Role } from '../common/enums/role.enum';
+import { Status } from '../common/enums/role.enum';
 
 @Injectable()
 export class UsersService {
     constructor(private prisma: PrismaService, @Inject('AUTH_SERVICE') private readonly authService: ClientProxy) {}
 
+
 async createUser(data: number) {
 const accountId = data
-const role = 'ADMIN'
-const status = 'ACTIVE'
-return this.prisma.user.create({ data: { accountId, role, status } });
+return this.prisma.user.create({ data: { accountId, role: Role.ADMIN, status: Status.ACTIVE } });
 }
 
 async getUser(data: number) {

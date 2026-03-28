@@ -8,7 +8,6 @@ export class PaymentsController {
 
   @MessagePattern('checkout-payment')
   async checkoutPayment(data: any) {
-    console.log('Received data for payment processing:', data);
     return this.paymentsService.checkoutPayment(data);
   }
 

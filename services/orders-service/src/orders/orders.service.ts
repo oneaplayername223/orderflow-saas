@@ -1,9 +1,9 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { OrderStatus, Prisma } from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { Item } from './../common/types/items.type';
 
 @Injectable()
 export class OrdersService {
@@ -11,11 +11,10 @@ export class OrdersService {
 @Inject('PAYMENTS_SERVICE') private readonly paymentsService: ClientProxy, 
 @Inject('NOTIFICATION_SERVICE') private readonly notificationService: ClientProxy) {}
 
-  async create(payload: any) {
-    const companyId = payload.user_id.accountId;
-    const userId = payload.user_id.userId;
 
-    const { user_id, ...dtoData } = payload;
+  async create(payload: any) {
+
+    const { companyId, userId, user_id, ...dtoData} = payload;
 
     const createOrderDto = {
       ...dtoData,
@@ -37,7 +36,7 @@ export class OrdersService {
         assignedTo: createOrderDto.assignedTo,
         companyId,
         items: {
-          create: createOrderDto.items.map((item: any) => ({
+          create: createOrderDto.items.map((item: Item) => ({
             referenceName: item.referenceName,
             description: item.description,
             quantity: item.quantity,
@@ -60,8 +59,7 @@ const status: OrderStatus = payload.updateStatusDto.status
 if (status === OrderStatus.COMPLETED) throw new RpcException('You cannot edit an order to complete it');
 if (status === OrderStatus.CONFIRMED) throw new RpcException('You cannot change the status of a confirmed order');
 
-const {updateStatusDto} = payload
- const id = Number(payload.orderId)
+const id = Number(payload.orderId)
 const order = await this.prisma.orders.update({where: {id: id, companyId: userId}, data: {status}});
 
 if (!order) throw new RpcException('Order not found');

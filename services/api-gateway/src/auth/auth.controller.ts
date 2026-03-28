@@ -21,7 +21,8 @@ export class AuthController {
     
     const token: string = response.token;
     res.cookie('flowToken', token, { httpOnly: true });
-    return JSON.stringify(response.message);
+    console.log(res)
+    return JSON.stringify(response);
   }
   
   @Post('logout')

@@ -19,8 +19,8 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(registerUserDto.password, 10);
     const query = await this.prisma.account.create({ data: {  ...registerUserDto, password: hashedPassword, } });
     this.notificationService.emit('register-notification', registerUserDto);
-    await this.usersService.emit('create-user', query.id);
-    await this.billingService.emit('create-billing', query.id);
+    this.usersService.emit('create-user', query.id);
+    this.billingService.emit('create-billing', query.id);
     return {
       message: 'User registered successfully',
     };
@@ -30,7 +30,6 @@ export class AuthService {
   
 async loginUser(loginUserDto: LoginUserDto) {
   const ip = loginUserDto['ip'];
-  console.log('IP Address:', ip);
     const username = loginUserDto.username;
     const user = await this.prisma.account.findFirst({
       where: { username: username },
