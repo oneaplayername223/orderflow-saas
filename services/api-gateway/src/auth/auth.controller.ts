@@ -21,7 +21,6 @@ export class AuthController {
     
     const token: string = response.token;
     res.cookie('flowToken', token, { httpOnly: true });
-    console.log(res)
     return JSON.stringify(response);
   }
   
