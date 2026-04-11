@@ -24,8 +24,8 @@ export class BillingService {
     }
 
     async getBilling(accountId: GetBillingDto) {
-    
-       
+
+
         const id = accountId.accountId
         console.log('Executing getBilling for accountId:', id);
         const query = await this.prismaService.billing.findFirst({
@@ -33,17 +33,23 @@ export class BillingService {
                 accountId: id,
             },
         });
-        const currentDate =  query?.createdAt;
-        const expireDate = query?.expireAt;
-        if (currentDate! >= expireDate!) {
+
+        // return false if no billing
+        if (!query) {
+            console.log('No billing found for accountId:', id);
+            return false;
+        }
+
+        const currentDate = query.createdAt;
+        const expireDate = query.expireAt;
+
+        if (currentDate >= expireDate) {
             console.log('Billing expired for accountId:', accountId);
             return false
         }
         return {
             query,
             message: 'Billing is active',
-        }
-      
-        
+        };
     }
 }
