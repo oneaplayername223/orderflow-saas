@@ -671,9 +671,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 For issues, questions, or contributions:
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/your-org/OrderFlow-SaaS/issues)
-- **Documentation**: Check the [docs](docs/) folder
-- **Email**: support@orderflow.local
+- **Email**: elianjmarquezb@gmail.com
 
 ---
 
